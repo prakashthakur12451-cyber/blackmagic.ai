@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    
+        
+        body {
+    /* Background Image */
+    background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1920&q=80') 
+                no-repeat center center fixed;
+    background-size: cover;
+
+    /* Keep layout centered */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Dark overlay for better readability */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 20, 0.8); /* semi-transparent overlay */
+   
+    z-index: -1;
+}
+
+
+    /* Dark overlay for better readability */
+    body::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgba(10, 10, 20, 0.8), rgba(10, 10, 20, 0.8));
+        backdrop-filter: blur(4px);
+        z-index: -1;
+    }
+    
+    .chat-container {
+    width: 100%;
+    max-width: 900px;
+    height: 90vh;
+    margin: auto;
+    background: transparent;
+    flex-direction: column;
+    
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+
+}
+
+    .chat-header {
+        background:transparent;
+        color: white;
+        padding: 25px;
+        text-align: center;
+        position: relative;
+    }
+    
+    .chat-title {
+        font-size: 80px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+    }
+    
+    .chat-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.85;
+    }
+    
+    .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background: transparent;
+    }
+    
+    .message {
+        margin-bottom: 20px;
+        display: flex;
+        animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .user-message {
+        justify-content: flex-end;
+    }
+    
+    .bot-message {
+        justify-content: flex-start;
+    }
+    
+    .message-content {
+        padding: 12px 18px;
+       
+        max-width: 80%;
+        word-wrap: break-word;
+        line-height: 1.6;
+        
+    }
+    .user-message .message-content {
+        background: linear-gradient(135deg, #0c0c0c, #06b6d4);
+        color: white;
+      
+    }
+    
+    .bot-message .message-content {
+        background: rgba(255, 255, 255, 0.1);
+        color: #f1f5f9;
+       
+        
+    }
+
+    .chat-input {
+        display: flex;
+        padding: 18px;
+        background:transparent
+      
+    }
+    
+    #message-input {
+        flex: 1;
+        padding: 14px 18px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 25px;
+        outline: none;
+        font-size: 1rem;
+    }
+    
+    #message-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    #send-button {
+        background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        margin-left: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.3rem;
+        transition: transform 0.2s;
+    }
+    
+    #send-button:hover {
+        transform: scale(1.1);
+    }
+
+    #send-button:disabled {
+        background: #555;
+        cursor: not-allowed;
+    }
+
+
+
+        .typing-indicator {
+            display: flex;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 20px;
+            
+            border-left: 4px solid #667eea;
+            width: fit-content;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #667eea;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 3px;
+            animation: typing 1.5s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0% { transform: translateY(0); opacity: 0.4; }
+            50% { transform: translateY(-8px); opacity: 1; }
+            100% { transform: translateY(0); opacity: 0.4; }
+        }
+
+        .error-message {
+            background: #ffebee !important;
+            border-left: 4px solid #f44336 !important;
+            color: #c62828 !important;
+        }
+
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <section class="chat-container">
+        <section class="chat-header">
+            <div class="chat-title">  BLACKMAGIC.AI</div>
+            <div class="chat-subtitle"><h1>Your intelligent chat companion</h1></div>
+        </section>
+        
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot-message">
+                <div class="message-content">
+                    Hello! I'm your  BLACKMAGIC.AI . I can help you with a wide variety of topics including:
+                    <br><br>
+                    • <strong>Answering questions</strong> on various subjects
+                    <br>• <strong>Creative writing</strong> and storytelling  
+                    <br>• <strong>Problem solving</strong> and analysis
+                    <br>• <strong>Learning support</strong> and explanations
+                    <br>• <strong>General conversation</strong> and more!
+                    <br><br>
+                    What would you like to chat about today?
+                </div> 
+            </div>
+            <div class="typing-indicator" id="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+       <section class="chat-input">
+    <!-- Add File Button -->
+    <button id="upload-button" title="Add File"
+        style="background: linear-gradient(135deg,#3d4e8b,#16a34a);
+               color:white; border:none; border-radius:50%;
+               width:45px; height:45px; margin-right:8px;
+               font-size:1.5rem; cursor:pointer;">+</button>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="file-input" accept="image/*" style="display:none">
+
+    <!-- Text Input -->
+    <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
+
+    <!-- More Options Button -->
+    <button id="more-button" title="More Options"
+        style="background: linear-gradient(135deg,#485c9f,#6262a2);
+               color:rgb(43, 30, 30); border:none; border-radius:50%;
+               width:45px; height:45px; margin-left:8px;
+               font-size:1.5rem; cursor:pointer;">⋮</button>
+
+    <!-- Send Button -->
+ <button id="send-button" title="Send">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22,2 15,22 11,13 2,9"></polygon>
+        </svg>
+      </button>
+</div>
+
+
+    </div>
+    
+
+    <script>
+        // ============================================
+        // CONFIGURATION - Replace with your API key
+        // ============================================
+        const API_KEY = 'AIzaSyCYXXKtV09I0JKBIbaQo_5w4X2pOA26fi4'; // Replace this with your actual Gemini API key
+        
+        // API Configuration
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
+        
+        // DOM elements
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const typingIndicator = document.getElementById('typing-indicator');
+        
+        // State
+        let conversationHistory = [];
+        let isProcessing = false;
+
+        // Initialize
+        initializeApp();
+
+        function initializeApp() {
+            // Check if API key is set
+           
+
+            // Set up event listeners
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !isProcessing) {
+                    sendMessage();
+                }
+            });
+
+            // Focus input
+            messageInput.focus();
+        }
+
+        async function sendMessage() {
+            const userMessage = messageInput.value.trim();
+            
+            if (!userMessage || isProcessing) return;
+
+            // Check API key
+          
+
+            isProcessing = true;
+            sendButton.disabled = true;
+            messageInput.disabled = true;
+
+            // Add user message to chat
+            addMessage(userMessage, true);
+            messageInput.value = '';
+            
+            // Add to conversation history
+            conversationHistory.push({
+                role: 'user',
+                parts: [{ text: userMessage }]
+            });
+
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                const response = await callGeminiAPI();
+                hideTypingIndicator();
+                
+                if (response) {
+                    addMessage(response, false);
+                    // Add bot response to conversation history
+                    conversationHistory.push({
+                        role: 'model',
+                        parts: [{ text: response }]
+                    });
+                } else {
+                    addMessage('Sorry, I encountered an error. Please try again.', false, true);
+                }
+            } catch (error) {
+                hideTypingIndicator();
+                console.error('Error calling Gemini API:', error);
+                
+                let errorMessage = 'Sorry, I encountered an error. ';
+                if (error.message.includes('API key')) {
+                    errorMessage += 'Please check your API key.';
+                } else if (error.message.includes('quota')) {
+                    errorMessage += 'API quota exceeded. Please try again later.';
+                } else if (error.message.includes('network')) {
+                    errorMessage += 'Network error. Please check your connection.';
+                } else {
+                    errorMessage += 'Please try again.';
+                }
+                
+                addMessage(errorMessage, false, true);
+            } finally {
+                isProcessing = false;
+                sendButton.disabled = false;
+                messageInput.disabled = false;
+                messageInput.focus();
+            }
+        }
+
+        async function callGeminiAPI() {
+            try {
+                const requestBody = {
+                    contents: conversationHistory.length > 10 
+                        ? conversationHistory.slice(-10) // Keep last 10 messages for context
+                        : conversationHistory,
+                    generationConfig: {
+                        temperature: 0.7,
+                        topK: 40,
+                        topP: 0.95,
+                        maxOutputTokens: 2048,
+                    },
+                    safetySettings: [
+                        {
+                            category: "HARM_CATEGORY_HARASSMENT",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        },
+                        {
+                            category: "HARM_CATEGORY_HATE_SPEECH",
+                            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                        }
+                    ]
+                };
+
+                const response = await fetch(`${GEMINI_API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('API Error:', errorData);
+                    
+                    if (response.status === 400) {
+                        throw new Error('Invalid API key or request format');
+                    } else if (response.status === 403) {
+                        throw new Error('API key access denied');
+                    } else if (response.status === 429) {
+                        throw new Error('API quota exceeded. Please try again later.');
+                    } else {
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+                }
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                    return data.candidates[0].content.parts[0].text;
+                } else {
+                    throw new Error('Unexpected response format');
+                }
+                
+            } catch (error) {
+                console.error('Gemini API Error:', error);
+                throw error;
+            }
+        }
+
+        function addMessage(message, isUser, isError = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = `message-content ${isError ? 'error-message' : ''}`;
+            
+            if (isUser) {
+                messageContent.textContent = message;
+            } else {
+                // Convert markdown to HTML for bot messages
+                messageContent.innerHTML = markdownToHtml(message);
+            }
+            
+            messageDiv.appendChild(messageContent);
+            chatMessages.insertBefore(messageDiv, typingIndicator);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function markdownToHtml(markdown) {
+            let html = markdown;
+            
+            // Convert headers
+            html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+            html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+            
+            // Convert bold and italic
+            html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Convert inline code
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Convert code blocks
+            html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+            
+            // Convert links
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            
+            // Convert line breaks and paragraphs
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = html.replace(/\n/g, '<br>');
+            
+            // Wrap in paragraph tags if not already wrapped
+            if (!html.includes('<h') && !html.includes('<p>') && !html.includes('<ul>') && !html.includes('<ol>')) {
+                html = '<p>' + html + '</p>';
+            }
+            
+            // Convert unordered lists
+            html = html.replace(/^\* (.*$)/gim, '<li>$1</li>');
+            html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+            
+            // Convert ordered lists
+            html = html.replace(/^\d+\. (.*$)/gim, '<li>$1</li>');
+            
+            // Convert blockquotes
+            html = html.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
+            
+            // Convert horizontal rules
+            html = html.replace(/^---$/gm, '<hr>');
+            
+            return html;
+        }
+
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'flex';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+        // Open gallery when upload button clicked
+document.getElementById('upload-button').addEventListener('click', () => {
+    document.getElementById('file-input').click();
+});
+
+// Show selected file in chat
+document.getElementById('file-input').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        addMessage(`📁 Selected: ${file.name}`, true);
+
+        // Preview image (optional)
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            addMessage(`<img src="${e.target.result}" style="max-width:100%;border-radius:10px;">`, true);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Show more options menu
+document.getElementById('more-button').addEventListener('click', () => {
+    alert("More options will be added here (voice, emoji, settings...)");
+});
+
+    </script>
+    
+</body>
+</html>
