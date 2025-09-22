@@ -16,16 +16,16 @@
         
         body {
     /* Background Image */
-    background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1920&q=80') 
-                no-repeat center center fixed;
+    background: white;
     background-size: cover;
 
     /* Keep layout centered */
-    height: 100vh;
+    height: 110vh;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+     
 }
 
 /* Dark overlay for better readability */
@@ -36,22 +36,11 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(10, 10, 20, 0.8); /* semi-transparent overlay */
    
-    z-index: -1;
 }
 
 
-    /* Dark overlay for better readability */
-    body::before {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(rgba(10, 10, 20, 0.8), rgba(10, 10, 20, 0.8));
-        backdrop-filter: blur(4px);
-        z-index: -1;
-    }
+    
     
     .chat-container {
     width: 100%;
@@ -67,12 +56,44 @@ body::before {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
+    background: transparent;
 
+
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin: 5px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #181818, #06b6d4);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #090909, #0891b2);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.chat-messages::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(135deg, #6d28d9, #0e7490);
+}
+
+/* Firefox scrollbar */
+.chat-messages {
+    scrollbar-width: thin;
+    scrollbar-color: #0a0a0a rgba(255, 255, 255, 0.1);
 }
 
     .chat-header {
         background:transparent;
-        color: white;
+        -webkit-break-inside: auto;
+        color: rgb(16, 16, 16);
         padding: 25px;
         text-align: center;
         position: relative;
@@ -80,11 +101,22 @@ body::before {
     
     .chat-title {
         font-size: 80px;
-        font-weight: bold;
+         display: flex;
+         font-weight: 800;
+         background-image: url('https://i.pinimg.com/736x/49/70/29/497029a59f987783ba9fdf40b2c847c4.jpg') 
+;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      
+        justify-content: center;
         margin-bottom: 5px;
         font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-
+        
+ 
+    
+ 
     }
+
     
     .chat-subtitle {
         font-size: 0.9rem;
@@ -126,43 +158,52 @@ body::before {
         
     }
     .user-message .message-content {
-        background: linear-gradient(135deg, #0c0c0c, #06b6d4);
-        color: white;
+        background: linear-gradient( #f9f7f9);
+        color: rgb(30, 31, 30);
       
     }
     
     .bot-message .message-content {
         background: rgba(255, 255, 255, 0.1);
-        color: #f1f5f9;
+        color: #121212;
        
         
     }
 
     .chat-input {
         display: flex;
-        padding: 18px;
-        background:transparent
-      
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        align-items: center;
+        gap: 10px;
+        position: sticky;
+        bottom: 0;
+        width: 100%;
+        flex-shrink: 0;
+        border-radius: 20px 20px 0 0;
     }
+    
     
     #message-input {
         flex: 1;
-        padding: 14px 18px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
-        border-radius: 25px;
+        padding: 15px 15px;
+        background: rgba(41, 31, 184, 0.1);
+        border: 1px solid rgba(240, 19, 19, 0.2);
+        color: rgb(29, 29, 30);
+        border-radius: 50px;
         outline: none;
         font-size: 1rem;
     }
     
     #message-input::placeholder {
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(24, 24, 24, 0.5);
     }
     
     #send-button {
-        background: linear-gradient(135deg, #8b5cf6, #06b6d4);
-        color: white;
+        background: linear-gradient(135deg, #363537, #06b6d4);
+        color: rgb(44, 43, 43);
         border: none;
         border-radius: 50%;
         width: 48px;
@@ -181,29 +222,139 @@ body::before {
     }
 
     #send-button:disabled {
-        background: #555;
+        background: #171717;
         cursor: not-allowed;
     }
 
+    /* Modern Button Styles */
+    .input-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+    }
 
+    .input-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: inherit;
+    }
 
-        .typing-indicator {
+    .input-button:hover::before {
+        opacity: 1;
+    }
+
+    .input-button:active {
+        transform: scale(0.95);
+    }
+
+    .upload-btn {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        margin-right: 8px;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .upload-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .options-btn {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        margin-left: 8px;
+        box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
+    }
+
+    .options-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(240, 147, 251, 0.6);
+    }
+
+    .send-btn {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        margin-left: 8px;
+        box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+    }
+
+    .send-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+    }
+
+    .send-btn:disabled {
+        background: linear-gradient(135deg, #6b7280, #9ca3af);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .send-btn:disabled::before {
+        opacity: 0;
+    }
+
+    /* Input Field Enhancements */
+    #message-input {
+        flex: 1;
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: #2d3748;
+        border-radius: 25px;
+        outline: none;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    #message-input:focus {
+        border-color: #667eea;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        transform: translateY(-1px);
+    }
+    
+    #message-input::placeholder {
+        color: rgba(45, 55, 72, 0.6);
+        font-weight: 400;
+    
             display: flex;
             padding: 15px 20px;
-            background: white;
+    
             border-radius: 20px;
             
-            border-left: 4px solid #667eea;
+      
             width: fit-content;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+         
             display: none;
         }
 
         .typing-indicator span {
             height: 8px;
             width: 8px;
-            background-color: #667eea;
+            background-color: #313132;
             border-radius: 50%;
             display: inline-block;
             margin: 0 3px;
@@ -234,6 +385,68 @@ body::before {
             opacity: 0.7;
             pointer-events: none;
         }
+
+        /* Image attachment styles */
+        .image-attachment {
+            position: relative;
+            margin: 10px 0;
+            max-width: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .image-attachment img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .image-attachment .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-attachment .remove-btn:hover {
+            background: rgba(255, 0, 0, 0.9);
+        }
+
+        .file-preview {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .file-preview .file-info {
+            flex: 1;
+        }
+
+        .file-preview .file-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .file-preview .file-size {
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
@@ -245,6 +458,7 @@ body::before {
         
         <div class="chat-messages" id="chat-messages">
             <div class="message bot-message">
+                 
                 <div class="message-content">
                     Hello! I'm your  BLACKMAGIC.AI . I can help you with a wide variety of topics including:
                     <br><br>
@@ -252,9 +466,10 @@ body::before {
                     <br>• <strong>Creative writing</strong> and storytelling  
                     <br>• <strong>Problem solving</strong> and analysis
                     <br>• <strong>Learning support</strong> and explanations
+                    <br>• <strong>Image analysis</strong> and description
                     <br>• <strong>General conversation</strong> and more!
                     <br><br>
-                    What would you like to chat about today?
+                    What would you like to chat about today? You can also upload images for me to analyze!
                 </div> 
             </div>
             <div class="typing-indicator" id="typing-indicator">
@@ -264,38 +479,43 @@ body::before {
             </div>
         </div>
         
-       <section class="chat-input">
+       <div class="chat-input">
     <!-- Add File Button -->
-    <button id="upload-button" title="Add File"
-        style="background: linear-gradient(135deg,#3d4e8b,#16a34a);
-               color:white; border:none; border-radius:50%;
-               width:45px; height:45px; margin-right:8px;
-               font-size:1.5rem; cursor:pointer;">+</button>
+    <button id="upload-button" class="input-button upload-btn" title="Add File">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.49"/>
+        </svg>
+    </button>
 
     <!-- Hidden File Input -->
-    <input type="file" id="file-input" accept="image/*" style="display:none">
+    <input type="file" id="file-input" accept="image/*,text/*,.pdf,.doc,.docx" style="display:none">
+
+    <!-- File Preview Area -->
+    <div id="file-preview" style="display:none;"></div>
 
     <!-- Text Input -->
     <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
 
     <!-- More Options Button -->
-    <button id="more-button" title="More Options"
-        style="background: linear-gradient(135deg,#485c9f,#6262a2);
-               color:rgb(43, 30, 30); border:none; border-radius:50%;
-               width:45px; height:45px; margin-left:8px;
-               font-size:1.5rem; cursor:pointer;">⋮</button>
+   <!-- <button id="more-button" class="input-button options-btn" title="More Options">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="1"/>
+            <circle cx="12" cy="5" r="1"/>
+            <circle cx="12" cy="19" r="1"/>
+        </svg>
+    </button>-->
 
     <!-- Send Button -->
- <button id="send-button" title="Send">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="22" y1="2" x2="11" y2="13"></line>
-          <polygon points="22,2 15,22 11,13 2,9"></polygon>
+    <button id="send-button" class="input-button send-btn" title="Send">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22,2 15,22 11,13 2,9"/>
         </svg>
-      </button>
+    </button>
 </div>
 
 
-    </div>
+</div>
     
 
     <script>
@@ -312,18 +532,20 @@ body::before {
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const typingIndicator = document.getElementById('typing-indicator');
+        const uploadButton = document.getElementById('upload-button');
+        const fileInput = document.getElementById('file-input');
+        const filePreview = document.getElementById('file-preview');
         
         // State
         let conversationHistory = [];
         let isProcessing = false;
+        let currentFile = null;
+        let currentFileData = null;
 
         // Initialize
         initializeApp();
 
         function initializeApp() {
-            // Check if API key is set
-           
-
             // Set up event listeners
             sendButton.addEventListener('click', sendMessage);
             messageInput.addEventListener('keypress', (e) => {
@@ -332,31 +554,138 @@ body::before {
                 }
             });
 
+            // File upload listeners
+            uploadButton.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // More options listener
+            document.getElementById('more-button').addEventListener('click', () => {
+                showMoreOptions();
+            });
+
             // Focus input
             messageInput.focus();
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // File size check (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            currentFile = file;
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentFileData = e.target.result.split(',')[1]; // Remove data:image/jpeg;base64, prefix
+                    showImagePreview(e.target.result, file.name);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // For text files or other formats
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentFileData = e.target.result;
+                    showFilePreview(file.name, file.size, file.type);
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function showImagePreview(imageSrc, fileName) {
+            filePreview.innerHTML = `
+                <div class="image-attachment">
+                    <img src="${imageSrc}" alt="${fileName}">
+                    <button class="remove-btn" onclick="removeFile()" title="Remove image">×</button>
+                </div>
+            `;
+            filePreview.style.display = 'block';
+        }
+
+        function showFilePreview(fileName, fileSize, fileType) {
+            const sizeKB = (fileSize / 1024).toFixed(1);
+            filePreview.innerHTML = `
+                <div class="file-preview">
+                    <div class="file-info">
+                        <div class="file-name">📄 ${fileName}</div>
+                        <div class="file-size">${sizeKB} KB • ${fileType}</div>
+                    </div>
+                    <button onclick="removeFile()" style="background:none;border:none;cursor:pointer;font-size:18px;">×</button>
+                </div>
+            `;
+            filePreview.style.display = 'block';
+        }
+
+        function removeFile() {
+            currentFile = null;
+            currentFileData = null;
+            filePreview.style.display = 'none';
+            filePreview.innerHTML = '';
+            fileInput.value = '';
         }
 
         async function sendMessage() {
             const userMessage = messageInput.value.trim();
             
-            if (!userMessage || isProcessing) return;
-
-            // Check API key
-          
+            if ((!userMessage && !currentFile) || isProcessing) return;
 
             isProcessing = true;
             sendButton.disabled = true;
             messageInput.disabled = true;
 
-            // Add user message to chat
-            addMessage(userMessage, true);
+            // Prepare message content
+            let messageContent = [];
+            let displayMessage = userMessage || "Analyzing uploaded file...";
+
+            if (currentFile && currentFile.type.startsWith('image/')) {
+                // For images, add both text and image to the API call
+                if (userMessage) {
+                    messageContent.push({ text: userMessage });
+                }
+                messageContent.push({
+                    inline_data: {
+                        mime_type: currentFile.type,
+                        data: currentFileData
+                    }
+                });
+                
+                // Show image in chat
+                if (userMessage) {
+                    addMessage(userMessage, true);
+                }
+                const imageSrc = `data:${currentFile.type};base64,${currentFileData}`;
+                addMessage(`<div class="image-attachment"><img src="${imageSrc}" alt="Uploaded image" style="max-width:100%;border-radius:10px;"></div>`, true);
+                
+            } else if (currentFile) {
+                // For text files
+                messageContent.push({ 
+                    text: userMessage ? `${userMessage}\n\nFile content:\n${currentFileData}` : `Please analyze this file:\n\n${currentFileData}`
+                });
+                addMessage(`📄 ${currentFile.name}\n${displayMessage}`, true);
+            } else {
+                // Text only
+                messageContent.push({ text: userMessage });
+                addMessage(userMessage, true);
+            }
+
             messageInput.value = '';
             
             // Add to conversation history
             conversationHistory.push({
                 role: 'user',
-                parts: [{ text: userMessage }]
+                parts: messageContent
             });
+
+            // Clear file after sending
+            removeFile();
 
             // Show typing indicator
             showTypingIndicator();
@@ -373,7 +702,7 @@ body::before {
                         parts: [{ text: response }]
                     });
                 } else {
-                    addMessage('Sorry, I encountered an error. Please try again.', false, true);
+                    addMessage('Sorry, you intrenet connection is show. Please try again.', false, true);
                 }
             } catch (error) {
                 hideTypingIndicator();
@@ -468,7 +797,7 @@ body::before {
             messageContent.className = `message-content ${isError ? 'error-message' : ''}`;
             
             if (isUser) {
-                messageContent.textContent = message;
+                messageContent.innerHTML = message;
             } else {
                 // Convert markdown to HTML for bot messages
                 messageContent.innerHTML = markdownToHtml(message);
@@ -536,30 +865,65 @@ body::before {
         function hideTypingIndicator() {
             typingIndicator.style.display = 'none';
         }
-        // Open gallery when upload button clicked
-document.getElementById('upload-button').addEventListener('click', () => {
-    document.getElementById('file-input').click();
-});
 
-// Show selected file in chat
-document.getElementById('file-input').addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        addMessage(`📁 Selected: ${file.name}`, true);
+        function showMoreOptions() {
+            const options = [
+                'Clear Chat History',
+                'Download Chat',
+                'Settings',
+                'About'
+            ];
+            
+            const choice = prompt('Choose an option:\n' + options.map((opt, i) => `${i+1}. ${opt}`).join('\n'));
+            
+            switch(choice) {
+                case '1':
+                    if (confirm('Clear all chat history?')) {
+                        conversationHistory = [];
+                        chatMessages.innerHTML = `
+                            <div class="message bot-message">
+                                <div class="message-content">
+                                    Chat history cleared! How can I help you today?
+                                </div>
+                            </div>
+                            <div class="typing-indicator" id="typing-indicator" style="display:none;">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        `;
+                    }
+                    break;
+                case '2':
+                    downloadChat();
+                    break;
+                case '3':
+                    alert('Settings panel coming soon!');
+                    break;
+                case '4':
+                    alert('BLACKMAGIC.AI - Powered by Google Gemini\nVersion 1.0');
+                    break;
+            }
+        }
 
-        // Preview image (optional)
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            addMessage(`<img src="${e.target.result}" style="max-width:100%;border-radius:10px;">`, true);
-        };
-        reader.readAsDataURL(file);
-    }
-});
+        function downloadChat() {
+            const chatContent = Array.from(chatMessages.querySelectorAll('.message')).map(msg => {
+                const isUser = msg.classList.contains('user-message');
+                const content = msg.querySelector('.message-content').textContent;
+                return `${isUser ? 'User' : 'AI'}: ${content}`;
+            }).join('\n\n');
+            
+            const blob = new Blob([chatContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `blackmagic-ai-chat-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
 
-// Show more options menu
-document.getElementById('more-button').addEventListener('click', () => {
-    alert("More options will be added here (voice, emoji, settings...)");
-});
+        // Make removeFile function global
+        window.removeFile = removeFile;
 
     </script>
     
